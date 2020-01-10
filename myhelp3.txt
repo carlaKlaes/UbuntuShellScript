@@ -1,0 +1,138 @@
+#!bin/bash
+
+function checkFile(){
+	declare -g x #global
+
+	if [ -e $1 ];
+	then
+		x=0  # file exist
+
+		if [ -r $1 ];
+		then
+			x=0  # file readable
+		else
+			x=2 # file not readable
+
+			if [ $2 == 1 ];
+			then
+				echo ""
+				echo " File in not readable."
+				echo " Press [Enter] to continue."
+				read anyKey
+			fi
+		fi
+	else
+		x=1 # File does not exist
+		if [ $2 == 1 ];
+		then
+			echo ""
+			echo "File does not exist"
+			echo "Press [Enter] to continue."
+			read anyKey
+		fi
+	fi
+}	
+
+while true; 
+do 
+	clear; # clear screen
+
+	#submenu3
+
+	echo "COMPRESS FILE"
+	echo ""
+	echo "1 -- Compress one file"
+	echo "2 -- Uncompress one file"
+	echo "3 -- Compress 2+ files"
+	echo "4 -- Uncompress 2+ files"
+	echo "5 -- Quit -- Return to Main Menu"
+	echo ""
+	echo -n "Enter your choice:"
+	read option
+
+	case $option in
+		1)#gzip
+			echo -n "File name:"
+			read filename
+		
+			checkFile $filename 1
+
+		
+			if [ $x == 0 ];	
+			then 
+				echo ""
+				gzip $filename
+				echo "File Compressed."
+				echo "Press [Enter] to continue."
+				read anyKey
+			fi;;
+			
+		2)#gunzip
+			echo -n "File name (.gz):"
+			read filename
+
+			checkFile $filename 1
+
+			if [ $x == 0 ];
+			then
+				echo ""
+				gunzip $filename
+				echo "File uncompressed."
+				echo "Press [Enter] to continue."
+				read anykey
+			fi;;
+	
+		3)#tar
+			echo -n "New file name:"
+			read newfilename
+
+			checkFile $newfilename 0
+
+			if [ $x == 1 ];
+			then
+				echo ""
+				echo -n "File name (can use wildcard):"
+				read filename
+
+			       	if [ "$filename" == "" ];
+				then
+					echo ""
+					echo "File invalid."
+					echo "Press [Enter] to continue."
+					read anykey
+				else 
+				
+					echo ""
+					tar -cvzf $newfilename.tar.gz $filename 
+					echo "File compressed"
+					echo "Press [Enter] to continue."
+					read anykey
+				fi
+			fi;;
+		4)#untar
+			echo -n "File name(.tar.gz):"
+			read filename
+
+			checkFile $filename 1
+
+			if [ $x == 0 ];
+			then 
+				echo ""
+				tar -xvzf $filename
+				echo "File uncompressed."
+				echo "Press [Enter] to continue."
+				read anyKey
+			fi;;
+
+		5) 
+			echo "Quitting...Return to main Menu"
+			sleep 2
+			exit;;
+
+		*)
+			echo "Choose a valid option"
+			sleep 2
+	esac
+done	
+
+

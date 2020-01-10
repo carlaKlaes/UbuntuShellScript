@@ -1,0 +1,37 @@
+#!/bin/bash
+
+while true; 
+do 
+	clear; # clear screen
+
+	#menu
+
+	echo "UNIX HELP MAIN MENU"
+	echo ""
+	echo "1 -- File and Directory Management Commands"
+	echo "2 -- Text Processing Commands"
+	echo "3 -- Compress File commands"
+	echo "4 -- exit"
+	echo ""
+	echo -n "Enter your choice:"
+	read option
+
+	case $option in
+		1) 
+		bash myhelp1.txt;;	
+		2)
+		bash myhelp2.txt;;
+		3)
+		bash myhelp3.txt;;
+		4)
+		echo "Exiting ..."
+		sleep 1
+		break;;
+		*)
+		echo "Enter a valid option"
+		sleep 2
+	esac
+done	
+
+
+
